@@ -1,3 +1,26 @@
 {
-  "name": "ship"
+  "name": "ship",
+  "url": "https://github.com/MarsOS/ship",
+  "bugtracker": "https://github.com/MarsOS/ship/issues",
+
+  "getVersion": "make version",
+
+  "source": {
+    "latest": "https://github.com/MarsOS/ship/archive/master.tar.gz"
+  },
+
+  "config": [],
+
+  "build": [
+    "make"
+  ],
+
+  "package": [
+    "make install DESTDIR=$pkgdir"
+  ],
+
+  "maintainer": {
+    "name": "Marius Messerschmidt",
+    "email": "marius.messerschmidt@googlemail.com"
+  }
 }

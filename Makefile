@@ -8,3 +8,6 @@ ARCH=\"$(shell uname -m)\"
 
 build:
 	$(CC) $(CPPFLAGS) -D VERSION=$(VERSION) -D ARCH=$(ARCH) -D COMMIT=$(COMMIT) $(SOURCES) $(LDFLAGS) -o ship
+
+version:
+	@echo $(VERSION) | sed s/\"//g
