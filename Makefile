@@ -11,3 +11,6 @@ build:
 
 version:
 	@echo $(VERSION) | sed s/\"//g
+
+install:
+	install ship -D -t $(DESTDIR)/usr/bin/
