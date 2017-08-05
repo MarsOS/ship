@@ -21,8 +21,9 @@ PackageBuilder::PackageBuilder (string name, json blueprint)
   archive_write_add_filter_gzip(this->a);
   archive_write_set_format_pax_restricted(this->a);
 
-  string fn = name + ".tar.gz";
-  archive_write_open_filename(this->a, fn.c_str());
+  this->fn = name;
+  string fnf = name + ".tar.gz";
+  archive_write_open_filename(this->a, fnf.c_str());
 }
 
 void PackageBuilder::build()
@@ -37,10 +38,28 @@ void PackageBuilder::build()
   }
 
   setenv("pkgdir", pkg_temp, 0);
-  setenv("srcdir", "./", 0);
+  setenv("srcdir", ".", 0);
   setenv("arch", ARCH, 0);
 
   cout << "=> Build environment is ready" << endl;
+
+  string vc = this->blueprint["getVersion"];
+  FILE *vCmd = popen(vc.c_str(), "r");
+  if(!vCmd)
+  {
+    cerr << "Could not execute the version command: " << this->blueprint["getVersion"] << endl;
+    exit(1);
+  }
+  char buffer[128] = {0};
+  fgets(buffer, 128, vCmd);
+  pclose(vCmd);
+
+  if(buffer[strlen(buffer) - 1] == '\n')
+    buffer[strlen(buffer) - 1] = '\0';
+
+  string version = buffer;
+
+  cout << version;
 
   this->runStage("config");
   this->runStage("build");
@@ -53,11 +72,18 @@ void PackageBuilder::build()
   cout << "=> All files are added to the archive" << endl;
 
   this->addMetaFile("size", to_string(total_size));
+  this->addMetaFile("arch", ARCH);
+  this->addMetaFile("version", version);
 
   cout << "=> Meta information collected" << endl;
 
   archive_write_close(a);
   archive_write_free(a);
+
+  string oldName = this->fn + ".tar.gz";
+  string newName = this->fn + "_" + version + "_" + ARCH + ".ship.tar.gz";
+
+  rename(oldName.c_str(), newName.c_str());
 
   cout << "=> Packge was successuflly build!" << endl;
 }

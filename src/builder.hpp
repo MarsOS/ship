@@ -21,6 +21,8 @@ protected:
   void runStage(string stage);
   struct archive *a;
   json blueprint;
+private:
+  string fn;
 };
 
 #endif // SHIP_BUILDER
