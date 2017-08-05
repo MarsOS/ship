@@ -14,3 +14,6 @@ version:
 
 install:
 	install ship -D -t $(DESTDIR)/usr/bin/
+
+doxygen:
+	doxygen
