@@ -166,7 +166,7 @@ void PackageBuilder::addDir(string realpath, string dest)
   {
     string realName = fileList->front();
     string baseName = realName;
-    baseName.replace(0, realpath.length(), "root");
+    baseName.replace(0, realpath.length(), dest);
 
     this->addFile(baseName, "", true, realName);
     fileList->pop_front();
