@@ -6,6 +6,7 @@
 #include <stdio.h>
 
 #include "builder.hpp"
+#include "info.hpp"
 
 #include <json.hpp>
 using json = nlohmann::json;
@@ -46,6 +47,28 @@ void buildPackage(int argc, char **argv)
   pb.build();
 }
 
+void getInfo(int argc, char **argv)
+{
+  if(argc <= 2)
+  {
+    printHelp();
+    exit(1);
+  }
+  PackageInfo p = PackageInfo(argv[2]);
+  cout << "      Package Information       " << endl;
+  cout << "--------------------------------" << endl;
+  cout << "Package     : " << p.getName() << "\t Version: " << p.getVersion() << endl;
+  cout << "Size        : " << p.getSize(1000) << " KB" << endl;
+  cout << "License     : " << p.getLicense() << endl;
+  cout << "Architecture: " << p.getArch() << (p.isCompatible() ? " [Compatible]" : " [Invalid]") << endl;
+  cout << "Project URL : " << p.getURL() << endl;
+  cout << endl;
+  cout << "If you encounter problems with this package, please contact its maintainer:" << endl;
+  cout << "  " << p.getMaintainer() << endl;
+  cout << "If you encounter other Bugs, please report it to the Bucktracker:" << endl;
+  cout << "  " << p.getBugtracker() << endl;
+}
+
 int main(int argc, char *argv[])
 {
   if(argc <= 1)
@@ -57,6 +80,8 @@ int main(int argc, char *argv[])
     printVersion();
   else if(strcmp(argv[1], "build") == 0)
     buildPackage(argc, argv);
+  else if(strcmp(argv[1], "info") == 0)
+    getInfo(argc, argv);
 
   return 0;
 }

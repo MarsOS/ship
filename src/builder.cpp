@@ -59,8 +59,6 @@ void PackageBuilder::build()
 
   string version = buffer;
 
-  cout << version;
-
   this->runStage("config");
   this->runStage("build");
   this->runStage("package");
