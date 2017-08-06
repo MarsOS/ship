@@ -16,8 +16,12 @@ using namespace std;
 void printHelp()
 {
   cout << "// ship  -  Package Manager for MarsOS" << endl << endl;
-  cout << "   help \tprint this help output" << endl;
-  cout << "version \tprint version information" << endl;
+  cout << "   help      \tprint this help output" << endl;
+  cout << "version      \tprint version information" << endl;
+  cout << endl;
+  cout << "  build      \tbuild a package from source" << endl;
+  cout << "   info  <P> \tshow information about a package" << endl;
+  cout << "bluepint <P> \tshow the blueprint which was used to build the package" << endl;
   exit(0);
 }
 
@@ -69,6 +73,17 @@ void getInfo(int argc, char **argv)
   cout << "  " << p.getBugtracker() << endl;
 }
 
+void showBlueprint(int argc, char **argv)
+{
+  if(argc <= 2)
+  {
+    printHelp();
+    exit(1);
+  }
+  PackageInfo p = PackageInfo(argv[2]);
+  cout << p.getBlueprint().dump(4) << endl;
+}
+
 int main(int argc, char *argv[])
 {
   if(argc <= 1)
@@ -82,6 +97,8 @@ int main(int argc, char *argv[])
     buildPackage(argc, argv);
   else if(strcmp(argv[1], "info") == 0)
     getInfo(argc, argv);
+  else if(strcmp(argv[1], "blueprint") == 0)
+    showBlueprint(argc, argv);
 
   return 0;
 }
