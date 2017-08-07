@@ -7,6 +7,7 @@
 
 #include "builder.hpp"
 #include "info.hpp"
+#include "cli.hpp"
 
 #include <json.hpp>
 using json = nlohmann::json;
@@ -28,9 +29,9 @@ void printHelp()
 void printVersion()
 {
   cout << "// ship  -  Package Manager for MarsOS" << endl << endl;
-  cout << "     Version: " << VERSION << endl;
-  cout << "      Commit: " << COMMIT << endl;
-  cout << "Architecture: " << ARCH << endl;
+  cout << CLI::KeyValueFormater("Version", VERSION) << endl;
+  cout << CLI::KeyValueFormater("Commit", COMMIT) << endl;
+  cout << CLI::KeyValueFormater("Architecture", ARCH) << endl;
   exit(0);
 }
 
@@ -59,13 +60,14 @@ void getInfo(int argc, char **argv)
     exit(1);
   }
   PackageInfo p = PackageInfo(argv[2]);
-  cout << "      Package Information       " << endl;
-  cout << "--------------------------------" << endl;
-  cout << "Package     : " << p.getName() << "\t Version: " << p.getVersion() << endl;
-  cout << "Size        : " << p.getSize(1000) << " KB" << endl;
-  cout << "License     : " << p.getLicense() << endl;
-  cout << "Architecture: " << p.getArch() << (p.isCompatible() ? " [Compatible]" : " [Invalid]") << endl;
-  cout << "Project URL : " << p.getURL() << endl;
+  cout << CLI::Header("Package Information") << endl;
+  cout << endl;
+  cout << CLI::KeyValueFormater("Package", p.getName()) << endl;
+  cout << CLI::KeyValueFormater("Version", p.getVersion()) << endl;
+  cout << CLI::KeyValueFormater("Size", to_string(p.getSize(1000)) + " KB") << endl;
+  cout << CLI::KeyValueFormater("License", p.getLicense()) << endl;
+  cout << CLI::KeyValueFormater("Architecture", p.getArch()) << " " << CLI::CompatabilityCheck(p.isCompatible()) << endl;
+  cout << CLI::KeyValueFormater("Project URL", p.getURL()) << endl;
   cout << endl;
   cout << "If you encounter problems with this package, please contact its maintainer:" << endl;
   cout << "  " << p.getMaintainer() << endl;
