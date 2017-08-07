@@ -1,1 +1,2 @@
 libarchive-dev
+libsqlite3-dev

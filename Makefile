@@ -1,13 +1,14 @@
 CPPFLAGS=-Wall -Ideps/ -I../deps/ -I../../deps/ -std=c++11
-LDFLAGS=-larchive
+LDFLAGS=-larchive -lsqlite3
 CC=g++
 VERSION=\"0.0.0\"
 SOURCES=src/*.cpp
 COMMIT=\"$(shell git rev-parse --verify HEAD)\"
 ARCH=\"$(shell uname -m)\"
-
+DBPATH=\"./ship.sqlite3\"
+DBLOCKPATH=\"./ship.sqlite3.lock\"
 build:
-	$(CC) $(CPPFLAGS) -D VERSION=$(VERSION) -D ARCH=$(ARCH) -D COMMIT=$(COMMIT) $(SOURCES) $(LDFLAGS) -o ship
+	$(CC) $(CPPFLAGS) -D DBLOCKPATH=$(DBLOCKPATH) -D DBPATH=$(DBPATH) -D VERSION=$(VERSION) -D ARCH=$(ARCH) -D COMMIT=$(COMMIT) $(SOURCES) $(LDFLAGS) -o ship
 
 version:
 	@echo $(VERSION) | sed s/\"//g

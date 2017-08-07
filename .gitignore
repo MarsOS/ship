@@ -34,3 +34,5 @@
 ship
 *.tar.gz
 docs/
+
+*.sqlite3

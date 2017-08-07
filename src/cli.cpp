@@ -24,15 +24,13 @@ string CLI::KeyValueFormater(string key, string value, int spacing)
   return ret;
 }
 
-string CLI::CompatabilityCheck(bool check)
+string CLI::CompatabilityCheck(bool check, string good, string bad)
 {
-  string c = "[Compatible]";
-  string i = "[Invalid]";
   string ret = "";
   if (check)
-    ret += COLOR_GREEN + c + RESET_COLOR;
+    ret += COLOR_GREEN + good + RESET_COLOR;
   else
-    ret += COLOR_RED + i + RESET_COLOR;
+    ret += COLOR_RED + bad + RESET_COLOR;
 
   return ret;
 }
