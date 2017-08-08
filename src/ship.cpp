@@ -9,6 +9,7 @@
 #include "info.hpp"
 #include "cli.hpp"
 #include "db.hpp"
+#include "installer.hpp"
 
 #include <json.hpp>
 using json = nlohmann::json;
@@ -61,6 +62,7 @@ void getInfo(int argc, char **argv)
     printHelp();
     exit(1);
   }
+
   PackageInfo p = PackageInfo(argv[2]);
   cout << CLI::Header("Package Information") << endl;
   cout << endl;
@@ -107,6 +109,18 @@ void selfCheck()
   exit(!status);
 }
 
+void installPackage(int argc, char **argv)
+{
+  if(argc <= 2)
+  {
+    printHelp();
+    exit(1);
+  }
+
+  PackageInstaller i = PackageInstaller(argv[2]);
+  i.install();
+}
+
 int main(int argc, char *argv[])
 {
   if(argc <= 1)
@@ -124,6 +138,8 @@ int main(int argc, char *argv[])
     showBlueprint(argc, argv);
   else if(strcmp(argv[1], "selfcheck") == 0)
     selfCheck();
+  else if(strcmp(argv[1], "install") == 0)
+    installPackage(argc, argv);
 
   return 0;
 }
