@@ -18,7 +18,8 @@ public:
   ~DBWrapper();
 
   bool insertPackage(string name, string version, string bp, int reason, string files, int size, int user);
-
+  bool updatePackage(string name, string version, string bp, string files, int size, int user);
+  bool packageExists(string name);
 protected:
   sqlite3 *db;
 };

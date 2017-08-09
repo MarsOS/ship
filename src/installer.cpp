@@ -41,15 +41,30 @@ void PackageInstaller::install()
   cout << "=> Updating Package Database" << endl;
 
   DBWrapper db = DBWrapper();
-  db.insertPackage(
-    this->pi->getName(),
-    this->pi->getVersion(),
-    this->pi->getBlueprint().dump(),
-    0,
-    "",
-    this->pi->getSize(),
-    getuid()
-  );
+  if(db.packageExists(this->pi->getName()))
+  {
+    cout << "=> Package allready installed, Updating" << endl;
+    db.updatePackage(
+      this->pi->getName(),
+      this->pi->getVersion(),
+      this->pi->getBlueprint().dump(),
+      "",
+      this->pi->getSize(),
+      getuid()
+    );
+  }
+  else
+  {
+    db.insertPackage(
+      this->pi->getName(),
+      this->pi->getVersion(),
+      this->pi->getBlueprint().dump(),
+      0,
+      "",
+      this->pi->getSize(),
+      getuid()
+    );
+  }
 
   cout << "=> Releasing Database Lock" << endl;
 
