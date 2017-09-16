@@ -26,6 +26,8 @@ void printHelp()
   cout << "    build      \tbuild a package from source" << endl;
   cout << "     info  <P> \tshow information about a package" << endl;
   cout << "  bluepint <P> \tshow the blueprint which was used to build the package" << endl;
+  cout << endl;
+  cout << "   querry      \tquerry local package database" << endl;
   exit(0);
 }
 
@@ -121,6 +123,77 @@ void installPackage(int argc, char **argv)
   i.install();
 }
 
+void querryDatabase(int argc, char **argv)
+{
+  string qs = "INVRSUD";
+  if(argc > 2)
+  {
+    qs = argv[2];
+  }
+
+  DBWrapper db = DBWrapper();
+  list<DBEntry> r = db.querryPackages();
+  for(char x : qs)
+  {
+    switch(x)
+    {
+      case 'I':
+        cout << "LOC ID\t";
+        break;
+      case 'N':
+        cout << "NAME\t";
+        break;
+      case 'V':
+        cout << "VERSION\t";
+        break;
+      case 'R':
+        cout << "REASON\t";
+        break;
+      case 'S':
+        cout << "SIZE\t";
+        break;
+      case 'U':
+        cout << "USER\t";
+        break;
+      case 'D':
+        cout << "DATE\t";
+        break;
+    }
+  }
+  cout << endl;
+  for(DBEntry e : r)
+  {
+    for(char x : qs)
+    {
+       switch(x)
+       {
+         case 'I':
+           cout  << e.id << "\t";
+           break;
+         case 'N':
+           cout << e.name << "\t";
+           break;
+         case 'V':
+           cout << e.version << "\t";
+           break;
+         case 'R':
+           cout << e.reason << "\t";
+           break;
+         case 'S':
+           cout << e.size << "\t";
+           break;
+         case 'U':
+           cout << e.user << "\t";
+           break;
+         case 'D':
+           cout << e.install << "\t";
+           break;
+       }
+     }
+     cout << endl;
+  }
+}
+
 int main(int argc, char *argv[])
 {
   if(argc <= 1)
@@ -140,6 +213,8 @@ int main(int argc, char *argv[])
     selfCheck();
   else if(strcmp(argv[1], "install") == 0)
     installPackage(argc, argv);
+  else if(strcmp(argv[1], "querry") == 0)
+    querryDatabase(argc, argv);
 
   return 0;
 }

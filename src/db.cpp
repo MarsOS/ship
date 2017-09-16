@@ -164,3 +164,35 @@ bool DBWrapper::TryRelease()
 {
   return remove(DBLOCKPATH) == 0;
 }
+
+list<DBEntry> DBWrapper::querryPackages()
+{
+  list<DBEntry> ret;
+
+  sqlite3_stmt *ps;
+  sqlite3_prepare(this->db,
+    "SELECT * FROM packages;",
+     -1, &ps, NULL);
+
+  while(sqlite3_step(ps) == SQLITE_ROW)
+  {
+    DBEntry ent = DBEntry();
+
+    ent.id = sqlite3_column_int(ps, 0);
+    ent.name = (const char*) sqlite3_column_text(ps, 1);
+    ent.version = (const char*) sqlite3_column_text(ps, 2);
+    ent.install = sqlite3_column_int(ps, 3);
+    ent.change = sqlite3_column_int(ps, 4);
+    ent.blueprint = json::parse(sqlite3_column_text(ps, 5));
+    ent.reason = sqlite3_column_int(ps, 6);
+    ent.files = (const char*) sqlite3_column_text(ps, 7);
+    ent.size = sqlite3_column_int(ps, 8);
+    ent.user = sqlite3_column_int(ps, 9);
+    ent.lastuser = sqlite3_column_int(ps, 10);
+
+    ret.push_back(ent);
+  }
+
+
+  return ret;
+}
